@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RiNo, Denver Colorado — The Art District</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rust: #B8532E;
+    --brick: #8B3A2A;
+    --charcoal: #1A1A1A;
+    --warm-gray: #2C2926;
+    --sand: #D4C5A9;
+    --cream: #F5F0E8;
+    --gold: #C9A84C;
+    --muted-teal: #4A7C72;
+    --off-white: #EDE8E0;
+    --dark-overlay: rgba(26,26,26,0.85);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rust) var(--charcoal);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--charcoal);
+    color: var(--cream);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ===== NOISE OVERLAY ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* ===== SCROLL ANIMATIONS ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1), transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-80px);
+    transition: opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1), transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .reveal-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(80px);
+    transition: opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1), transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .reveal-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    overflow: hidden;
+    background: linear-gradient(135deg, #2C1810 0%, #1A1A1A 50%, #0D1B1A 100%);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(184,83,46,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(74,124,114,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.05) 0%, transparent 70%);
+  }
+
+  /* Brick pattern overlay */
+  .hero-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 28px,
+        rgba(245,240,232,0.3) 28px,
+        rgba(245,240,232,0.3) 30px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 58px,
+        rgba(245,240,232,0.2) 58px,
+        rgba(245,240,232,0.2) 60px
+      );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 4rem 5vw 5rem;
+    max-width: 900px;
+  }
+
+  .hero-tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.85rem, 1.2vw, 1rem);
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 50px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    font-weight: 900;
+    line-height: 0.95;
+    color: var(--cream);
+    margin-bottom: 0.3em;
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 span {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.45em;
+    color: var(--sand);
+    letter-spacing: 0.05em;
+    margin-top: 0.3em;
+  }
+
+  .hero-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(1rem, 1.5vw, 1.15rem);
+    color: rgba(212,197,169,0.7);
+    max-width: 480px;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .hero-credit {
+    position: absolute;
+    bottom: 2rem;
+    right: 3rem;
+    font-size: 0.75rem;
+    color: rgba(212,197,169,0.35);
+    writing-mode: vertical-rl;
+    letter-spacing: 0.15em;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    font-family: 'Bebas Neue', sans-serif;
+    animation: float 2.5s ease-in-out infinite;
+  }
+
+  .hero-scroll .line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* Decorative line on right */
+  .hero-deco {
+    position: absolute;
+    top: 15%;
+    right: 8vw;
+    width: 1px;
+    height: 55%;
+    background: linear-gradient(to bottom, transparent, var(--rust), transparent);
+    opacity: 0.3;
+  }
+
+  .hero-deco::after {
+    content: '1871';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+    color: var(--rust);
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+
+  /* ===== SECTION COMMON ===== */
+  section {
+    position: relative;
+    padding: 8rem 5vw;
+  }
+
+  .section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.75rem, 1vw, 0.9rem);
+    letter-spacing: 0.4em;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 30px;
+    height: 2px;
+    background: var(--rust);
+  }
+
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -0.01em;
+  }
+
+  .section-text {
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
+    color: rgba(245,240,232,0.75);
+    max-width: 600px;
+    line-height: 1.9;
+    font-weight: 300;
+  }
+
+  /* ===== BACKGROUND SECTION ===== */
+  .background-section {
+    background: var(--charcoal);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .bg-visual {
+    position: relative;
+    height: 500px;
+    background: linear-gradient(135deg, var(--brick), var(--warm-gray));
+    background-image: url('images/pdf_img_0.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .bg-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 14px, rgba(255,255,255,0.2) 14px, rgba(255,255,255,0.2) 15px),
+      repeating-linear-gradient(90deg, transparent, transparent 29px, rgba(255,255,255,0.15) 29px, rgba(255,255,255,0.15) 30px);
+  }
+
+  .bg-visual-text {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 6rem;
+    line-height: 0.9;
+    color: rgba(245,240,232,0.06);
+    letter-spacing: 0.05em;
+  }
+
+  .bg-visual .year-badge {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 80px;
+    height: 80px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline-section {
+    background: var(--warm-gray);
+    padding: 10rem 5vw;
+  }
+
+  .timeline-header {
+    text-align: center;
+    margin-bottom: 8rem;
+  }
+
+  .timeline-header .section-label {
+    justify-content: center;
+  }
+
+  .timeline-header .section-label::before {
+    display: none;
+  }
+
+  .timeline {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--rust), var(--rust), transparent);
+    transform: translateX(-50%);
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 6rem;
+    position: relative;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 1.5rem;
+    width: 12px;
+    height: 12px;
+    background: var(--rust);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    box-shadow: 0 0 0 4px var(--warm-gray), 0 0 0 5px rgba(184,83,46,0.3);
+  }
+
+  .timeline-item:nth-child(odd) .tl-content {
+    text-align: right;
+    padding-right: 3rem;
+  }
+  .timeline-item:nth-child(odd) .tl-visual {
+    padding-left: 3rem;
+  }
+
+  .timeline-item:nth-child(even) .tl-content {
+    order: 2;
+    padding-left: 3rem;
+  }
+  .timeline-item:nth-child(even) .tl-visual {
+    order: 1;
+    padding-right: 3rem;
+    text-align: right;
+  }
+
+  .tl-year {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .tl-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .tl-text {
+    font-size: 0.95rem;
+    color: rgba(245,240,232,0.65);
+    line-height: 1.85;
+    font-weight: 300;
+  }
+
+  .tl-visual-box {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: var(--charcoal);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tl-visual-box .icon-pattern {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tl-visual-box .icon-pattern svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.06;
+  }
+
+  .tl-visual-box .era-label {
+    position: absolute;
+    bottom: 1.2rem;
+    left: 1.2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--rust);
+    opacity: 0.7;
+    z-index: 2;
+  }
+
+  .tl-visual-box iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    pointer-events: none;
+  }
+
+  .tl-visual-box.map-historical iframe {
+    filter: sepia(0.8) contrast(1.2) saturate(0.3);
+  }
+
+  .tl-visual-box.map-plan iframe {
+    filter: grayscale(1) contrast(1.4) invert(0.05);
+  }
+
+  .tl-visual-box.map-satellite-old iframe {
+    filter: grayscale(1) contrast(1.1);
+  }
+
+  .tl-visual-box.map-satellite-modern iframe {
+    filter: saturate(0.8) contrast(1.05);
+  }
+
+  /* ===== TRANSITION STRIP ===== */
+  .color-strip {
+    height: 6px;
+    background: linear-gradient(90deg, var(--rust), var(--gold), var(--muted-teal), var(--brick), var(--rust));
+    background-size: 200% 100%;
+    animation: stripMove 8s linear infinite;
+  }
+
+  @keyframes stripMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  /* ===== TODAY SECTION ===== */
+  .today-section {
+    background: var(--charcoal);
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .today-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .stat-card {
+    background: rgba(245,240,232,0.03);
+    border: 1px solid rgba(245,240,232,0.06);
+    padding: 2rem;
+    border-radius: 2px;
+    transition: border-color 0.4s, transform 0.4s;
+  }
+
+  .stat-card:hover {
+    border-color: rgba(184,83,46,0.3);
+    transform: translateY(-4px);
+  }
+
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: rgba(245,240,232,0.45);
+    margin-top: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .today-visual {
+    position: relative;
+  }
+
+  .mural-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1.3fr;
+    gap: 0.75rem;
+    height: 500px;
+  }
+
+  .mural-cell {
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mural-cell:nth-child(1) {
+    background: linear-gradient(135deg, var(--rust), #D4623A);
+    background-image: url('https://images.unsplash.com/photo-1658051079135-31ad28dce86e?w=600&q=80&fit=crop');
+    background-size: cover;
+    background-position: center;
+    grid-row: 1 / 3;
+  }
+  .mural-cell:nth-child(2) {
+    background: linear-gradient(135deg, var(--muted-teal), #2A5C52);
+    background-image: url('https://images.unsplash.com/photo-1622366483038-cd18f78c7a9d?w=500&q=80&fit=crop');
+    background-size: cover;
+    background-position: center;
+  }
+  .mural-cell:nth-child(3) {
+    background: linear-gradient(135deg, var(--gold), #A8872E);
+    background-image: url('https://images.unsplash.com/photo-1574521355290-c7bfcafd5c9d?w=500&q=80&fit=crop');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .mural-cell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255,255,255,0.02) 10px,
+      rgba(255,255,255,0.02) 20px
+    );
+  }
+
+  /* ===== FUTURE SECTION ===== */
+  .future-section {
+    background: linear-gradient(180deg, var(--warm-gray) 0%, #0D1B1A 100%);
+    text-align: center;
+    padding: 10rem 5vw;
+  }
+
+  .future-section .section-label {
+    justify-content: center;
+  }
+  .future-section .section-label::before { display: none; }
+
+  .future-section .section-heading {
+    max-width: 700px;
+    margin: 0 auto 2rem;
+  }
+
+  .future-section .section-text {
+    max-width: 700px;
+    margin: 0 auto 4rem;
+  }
+
+  .future-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .future-card {
+    background: rgba(245,240,232,0.03);
+    border: 1px solid rgba(245,240,232,0.06);
+    padding: 3rem 2.5rem;
+    border-radius: 2px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.5s, transform 0.5s;
+  }
+
+  .future-card:hover {
+    border-color: rgba(184,83,46,0.4);
+    transform: translateY(-6px);
+  }
+
+  .future-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--rust), var(--gold));
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  .future-card:hover::before {
+    opacity: 1;
+  }
+
+  .future-card-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1.5rem;
+    color: var(--rust);
+  }
+
+  .future-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .future-card p {
+    font-size: 0.92rem;
+    color: rgba(245,240,232,0.6);
+    line-height: 1.85;
+    font-weight: 300;
+  }
+
+  /* ===== VISION SECTION ===== */
+  .vision-section {
+    background: var(--charcoal);
+    padding: 8rem 5vw;
+  }
+
+  .vision-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .vision-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--cream);
+    position: relative;
+  }
+
+  .vision-label {
+    margin-top: 2.5rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.35em;
+    color: var(--rust);
+  }
+
+  /* ===== SATELLITE COMPARISON ===== */
+  .satellite-section {
+    background: var(--charcoal);
+    padding: 6rem 5vw;
+  }
+
+  .satellite-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .satellite-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .sat-panel {
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 1px solid rgba(245,240,232,0.08);
+    aspect-ratio: 4/3;
+  }
+
+  .sat-panel img,
+  .sat-panel iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border: 0;
+  }
+
+  .sat-panel .sat-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 1.2rem;
+    background: linear-gradient(to top, rgba(26,26,26,0.9), transparent);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+  }
+
+  @media (max-width: 900px) {
+    .satellite-comparison {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ===== MANAGING GROWTH ===== */
+  .growth-section {
+    background: var(--warm-gray);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .growth-priorities {
+    margin-top: 2.5rem;
+  }
+
+  .priority-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(245,240,232,0.06);
+  }
+
+  .priority-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--rust);
+    min-width: 2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .priority-item h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+  }
+
+  .priority-item p {
+    font-size: 0.9rem;
+    color: rgba(245,240,232,0.6);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .growth-visual {
+    position: relative;
+    height: 450px;
+  }
+
+  .layered-blocks {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .layer-block {
+    position: absolute;
+    border-radius: 2px;
+  }
+
+  .layer-block:nth-child(1) {
+    bottom: 0; left: 0;
+    width: 75%; height: 80%;
+    background: linear-gradient(135deg, rgba(139,58,42,0.4), rgba(139,58,42,0.15));
+    border: 1px solid rgba(139,58,42,0.2);
+  }
+  .layer-block:nth-child(2) {
+    bottom: 10%; left: 15%;
+    width: 70%; height: 70%;
+    background: linear-gradient(135deg, rgba(74,124,114,0.3), rgba(74,124,114,0.1));
+    border: 1px solid rgba(74,124,114,0.2);
+  }
+  .layer-block:nth-child(3) {
+    bottom: 20%; left: 30%;
+    width: 65%; height: 60%;
+    background: linear-gradient(135deg, rgba(201,168,76,0.25), rgba(201,168,76,0.08));
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .layered-blocks .overlay-text {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    color: rgba(245,240,232,0.25);
+    text-align: right;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #111;
+    padding: 4rem 5vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(245,240,232,0.05);
+  }
+
+  .footer-left {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .footer-left span {
+    color: var(--rust);
+  }
+
+  .footer-right {
+    font-size: 0.8rem;
+    color: rgba(245,240,232,0.35);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.5rem 3vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.4s, padding 0.4s;
+  }
+
+  .nav.scrolled {
+    background: rgba(26,26,26,0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 3vw;
+    border-bottom: 1px solid rgba(245,240,232,0.05);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.2em;
+    color: var(--cream);
+  }
+
+  .nav-logo span { color: var(--rust); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: rgba(245,240,232,0.6);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover {
+    color: var(--gold);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .background-section,
+    .today-section,
+    .growth-section {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .timeline-item {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      left: 0;
+    }
+
+    .timeline-item::before {
+      left: 0;
+    }
+
+    .timeline-item:nth-child(odd) .tl-content,
+    .timeline-item:nth-child(even) .tl-content {
+      text-align: left;
+      padding: 0;
+      order: 1;
+    }
+
+    .timeline-item:nth-child(odd) .tl-visual,
+    .timeline-item:nth-child(even) .tl-visual {
+      padding: 0;
+      order: 2;
+      text-align: left;
+    }
+
+    .future-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .nav-links { display: none; }
+
+    .hero-deco { display: none; }
+
+    .mural-grid { height: 300px; }
+
+    section { padding: 5rem 5vw; }
+
+    .hero-credit { display: none; }
+
+    footer {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    .footer-right { text-align: center; }
+  }
+
+  /* ===== COUNTER ANIMATION ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-content > * {
+    animation: fadeInUp 1s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+  .hero-content > *:nth-child(1) { animation-delay: 0.2s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.4s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.6s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.8s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-logo">RI<span>NO</span></div>
+  <ul class="nav-links">
+    <li><a href="#background">Background</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#today">Today</a></li>
+    <li><a href="#future">Future</a></li>
+    <li><a href="#growth">Growth</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-deco"></div>
+  <div class="hero-content">
+    <div class="hero-tag">THE ART DISTRICT</div>
+    <h1>RiNo,<br>Denver<span>River North Art District — Colorado</span></h1>
+    <p class="hero-subtitle">From gritty rail yards to one of Denver's most vibrant creative neighborhoods. A story of reinvention, art, and urban evolution.</p>
+  </div>
+  <div class="hero-credit">CAMRYN GERCHOW — MARCH 3, 2026</div>
+  <div class="hero-scroll">
+    SCROLL
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- BACKGROUND -->
+<section class="background-section" id="background">
+  <div class="reveal-left">
+    <div class="section-label">ORIGINS</div>
+    <h2 class="section-heading">Background Information</h2>
+    <p class="section-text">What we now call the River North Art District wasn't colorful or creative at all. It was loud, gritty, and built around the railroad tracks and the South Platte River. Warehouses, rail yards, and factories filled the area, and most of the people nearby were working class laborers tied to Denver's growing mining and transportation economy.</p>
+    <br>
+    <p class="section-text">It wasn't a place people went for murals or breweries. It was a place people went to work. The bones of that industrial past — especially the brick buildings and rail lines — are still what shape the district today.</p>
+  </div>
+  <div class="reveal-right">
+    <div class="bg-visual">
+      <div class="bg-visual-text">RAIL<br>YARD</div>
+      <div class="year-badge">EST.<br>1871</div>
+    </div>
+  </div>
+</section>
+
+<div class="color-strip"></div>
+
+<!-- TIMELINE -->
+<section class="timeline-section" id="timeline">
+  <div class="timeline-header reveal">
+    <div class="section-label">A DISTRICT TRANSFORMED</div>
+    <h2 class="section-heading">The Timeline</h2>
+  </div>
+
+  <div class="timeline">
+    <!-- 1882 -->
+    <div class="timeline-item reveal">
+      <div class="tl-content">
+        <div class="tl-year">1882</div>
+        <h3 class="tl-title">Railroads &amp; Industry</h3>
+        <p class="tl-text">RiNo's growth began around 1871, when Denver expanded north along new railroad lines. The area became a hub for warehouses, stockyards, smelters, and manufacturing, especially tied to agriculture and mining. Its location near rail corridors made it ideal for moving goods, not for housing, so it developed as a mostly industrial district with working-class labor nearby.</p>
+      </div>
+      <div class="tl-visual">
+        <div class="tl-visual-box" style="background: #D4C5A9;">
+          <img src="images/pdf_img_3.png" alt="1882 historical map of Denver with RiNo area outlined in red" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(26,26,26,0.5), transparent 40%);pointer-events:none;"></div>
+          <div class="era-label">INDUSTRIAL ERA</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1928 -->
+    <div class="timeline-item reveal">
+      <div class="tl-content">
+        <div class="tl-year">1928</div>
+        <h3 class="tl-title">Decline &amp; Disinvestment</h3>
+        <p class="tl-text">After World War II, many industries left or modernized elsewhere, and rail use declined. Factories closed, buildings were abandoned, and the area saw economic disinvestment. Zoning kept it industrial, which limited residential or commercial reinvestment and left many large brick warehouses underused.</p>
+      </div>
+      <div class="tl-visual">
+        <div class="tl-visual-box" style="background: #E8E0D0;">
+          <img src="images/pdf_img_4.png" alt="1928 urban zoning plan of Denver RiNo area" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(26,26,26,0.5), transparent 40%);pointer-events:none;"></div>
+          <div class="era-label">POST-WAR DECLINE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1990s -->
+    <div class="timeline-item reveal">
+      <div class="tl-content">
+        <div class="tl-year">1990s</div>
+        <h3 class="tl-title">The Art Began</h3>
+        <p class="tl-text">Cheap rents and big open buildings attracted artists and makers looking for studio space. Murals, galleries, and informal creative spaces started appearing, slowly shifting the district's identity from purely industrial to arts-driven reuse. This is when the name RiNo Art District began to stick.</p>
+      </div>
+      <div class="tl-visual">
+        <div class="tl-visual-box" style="background: #2A2A2A;">
+          <img src="images/pdf_img_5.png" alt="1990s grayscale satellite view of River North Art District" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(26,26,26,0.5), transparent 40%);pointer-events:none;"></div>
+          <div class="era-label">CREATIVE REUSE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2019 -->
+    <div class="timeline-item reveal">
+      <div class="tl-content">
+        <div class="tl-year">2019</div>
+        <h3 class="tl-title">Rapid Redevelopment</h3>
+        <p class="tl-text">Once the arts scene gained attention, developers followed. Breweries, restaurants, apartments, and offices moved in, and many old warehouses were converted into mixed-use buildings. Public art became a defining feature, but so did rising rents and displacement, pushing out many of the artists and longtime industrial businesses that helped spark the revival.</p>
+      </div>
+      <div class="tl-visual">
+        <div class="tl-visual-box" style="background: #1A2520;">
+          <img src="images/pdf_img_8.png" alt="Modern satellite view of River North Art District showing development" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(26,26,26,0.5), transparent 40%);pointer-events:none;"></div>
+          <div class="era-label">URBAN REVIVAL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="color-strip"></div>
+
+<!-- TODAY -->
+<section class="today-section" id="today">
+  <div class="reveal-left">
+    <div class="section-label">THE PRESENT</div>
+    <h2 class="section-heading">Today's Growth</h2>
+    <p class="section-text">The creative energy that drew artists to RiNo continues to shape the district. Murals, galleries, and informal creative spaces remain central to its identity, even as the neighborhood matures into a more complex urban environment with mixed-use development, dining, and nightlife.</p>
+    <div class="today-stats">
+      <div class="stat-card reveal">
+        <div class="stat-number">150+</div>
+        <div class="stat-label">Public Murals</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-number">40+</div>
+        <div class="stat-label">Galleries & Studios</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-number">25+</div>
+        <div class="stat-label">Craft Breweries</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-number">1871</div>
+        <div class="stat-label">Year Founded</div>
+      </div>
+    </div>
+  </div>
+  <div class="today-visual reveal-right">
+    <div class="mural-grid">
+      <div class="mural-cell"></div>
+      <div class="mural-cell"></div>
+      <div class="mural-cell"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE -->
+<section class="future-section" id="future">
+  <div class="reveal">
+    <div class="section-label">LOOKING AHEAD</div>
+    <h2 class="section-heading">20 Years Into the Future</h2>
+    <p class="section-text">The River North Art District will likely feel like a fully built-out urban neighborhood rather than a former warehouse district. From an urban planning perspective, it will probably be denser and more vertical, with more mid-rise and high-rise housing mixed with offices and retail.</p>
+  </div>
+
+  <div class="future-cards">
+    <div class="future-card reveal">
+      <svg class="future-card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="8" y="6" width="32" height="36" rx="2"/>
+        <line x1="8" y1="18" x2="40" y2="18"/>
+        <line x1="20" y1="6" x2="20" y2="42"/>
+        <rect x="24" y="22" width="12" height="8" rx="1"/>
+        <rect x="12" y="22" width="4" height="16" rx="1"/>
+      </svg>
+      <h3>Denser &amp; More Vertical</h3>
+      <p>More mid-rise and high-rise housing mixed with offices and retail, transforming the skyline while respecting the industrial bones of the neighborhood.</p>
+    </div>
+    <div class="future-card reveal" style="transition-delay: 0.15s;">
+      <svg class="future-card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6 36 C12 30, 18 28, 24 30 C30 32, 36 28, 42 24"/>
+        <circle cx="14" cy="20" r="3"/>
+        <circle cx="34" cy="16" r="3"/>
+        <path d="M8 42 L40 42"/>
+        <path d="M14 42 L14 36"/>
+        <path d="M24 42 L24 32"/>
+        <path d="M34 42 L34 28"/>
+      </svg>
+      <h3>Walkable &amp; Connected</h3>
+      <p>Streets will prioritize walkability, bikes, and transit over cars, with wider sidewalks, better crossings, and stronger connections to the South Platte River.</p>
+    </div>
+    <div class="future-card reveal" style="transition-delay: 0.3s;">
+      <svg class="future-card-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M24 6 L24 42"/>
+        <path d="M18 12 L30 12"/>
+        <path d="M12 18 L36 18"/>
+        <circle cx="24" cy="30" r="8"/>
+        <path d="M20 30 L24 26 L28 30"/>
+        <path d="M6 42 L42 42"/>
+      </svg>
+      <h3>Public Spaces &amp; Riverfront</h3>
+      <p>Public spaces and riverfront parks will play a bigger role in tying the neighborhood together, creating gathering places for all residents.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- VISION -->
+<section class="vision-section">
+  <div class="vision-inner reveal">
+    <p class="vision-text">If done well, RiNo will evolve into a fully realized mixed-use district that is dense, walkable, and lived in at all hours — but still grounded in its industrial framework. The brick warehouses, rail alignments, and gritty scale will not disappear. Instead, they will serve as the structural backbone for a more mature urban neighborhood that feels layered rather than replaced.</p>
+    <div class="vision-label">ON THE FUTURE OF RINO</div>
+  </div>
+</section>
+
+<!-- SATELLITE COMPARISON -->
+<section class="satellite-section">
+  <div class="satellite-inner reveal">
+    <div class="section-label" style="justify-content:center;">TRANSFORMATION</div>
+    <h2 class="section-heading" style="text-align:center;">Before &amp; After</h2>
+    <p class="section-text" style="max-width:700px;margin:0 auto 2rem;text-align:center;">Satellite imagery reveals the dramatic transformation of the RiNo district over time — from sparse industrial lots to a dense, vibrant urban neighborhood.</p>
+    <div class="satellite-comparison">
+      <div class="sat-panel">
+        <img src="images/pdf_img_5.png" alt="RiNo district satellite view - before development (grayscale)" style="width:100%;height:100%;object-fit:cover;">
+        <div class="sat-label">2019</div>
+      </div>
+      <div class="sat-panel">
+        <img src="images/pdf_img_8.png" alt="RiNo district satellite view - after development (modern)" style="width:100%;height:100%;object-fit:cover;">
+        <div class="sat-label">TODAY</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANAGING GROWTH -->
+<section class="growth-section" id="growth">
+  <div class="reveal-left">
+    <div class="section-label">THE REAL CHALLENGE</div>
+    <h2 class="section-heading">Managing Growth</h2>
+    <p class="section-text">The challenge will not just be growth, but managing growth without erasing what made RiNo distinct in the first place.</p>
+    <div class="growth-priorities">
+      <div class="priority-item">
+        <span class="priority-num">01</span>
+        <div>
+          <h4>Preserve Creative Spaces</h4>
+          <p>Intentionally protect creative production spaces so artists can continue working in the district that they helped build.</p>
+        </div>
+      </div>
+      <div class="priority-item">
+        <span class="priority-num">02</span>
+        <div>
+          <h4>Active Ground Floors</h4>
+          <p>Require street-level activation that keeps the neighborhood vibrant, walkable, and full of character at all hours.</p>
+        </div>
+      </div>
+      <div class="priority-item">
+        <span class="priority-num">03</span>
+        <div>
+          <h4>Affordable Housing</h4>
+          <p>Secure affordable housing so artists and working residents are not pushed out as land values rise around them.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="growth-visual reveal-right">
+    <div style="position:relative;width:100%;height:100%;border-radius:2px;overflow:hidden;border:1px solid rgba(245,240,232,0.08);">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12254.66!2d-104.9828!3d39.7677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x876c78c3457a31c7%3A0x7142e7b8e42b2e3b!2sRiNo%20Art%20District!5e0!3m2!1sen!2sus!4v1700000000000"
+        width="100%" height="100%" style="border:0;filter:saturate(0.7) contrast(1.1);" allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:1rem 1.2rem;background:linear-gradient(to top, rgba(26,26,26,0.9), transparent);font-family:'Bebas Neue',sans-serif;font-size:0.75rem;letter-spacing:0.35em;color:rgba(245,240,232,0.4);">RINO ART DISTRICT — DENVER, CO</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">Ri<span>No</span> Denver</div>
+  <div class="footer-right">
+    Camryn Gerchow — March 3, 2026<br>
+    The Art District — River North, Colorado
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 80);
+  });
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
